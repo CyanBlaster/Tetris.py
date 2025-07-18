@@ -20,9 +20,20 @@ def BetterZeroField(x, y):
 def FalseField(x, y):
     return [[False] * x for i in range(y)]
 
+def rotate(a):
+    nRows = len(a[0])
+    nCol = len(a)
+    b = []
+    for x in range(nRows):
+        b.append([])
+        for y in range(nCol - 1, -1, -1):
+            b[x].append(a[y][x])
+    return b
+    
+
 
 def RandomNum():
-    x = random.randint(1, 7) 
+    x = random.randint(1, 6) 
     return x
         
 def DFS(map, x, y, visited):
@@ -57,10 +68,12 @@ def main():
     yIdx = 2
     delta = 0
     visited = FalseField(NumWidth, NumHeight)
-    maxHeight = NumHeight - 1
+    blockTop = 0
+    blockWidth = 2
+    blockHeight = 3
 
 
-    falseboard = BetterZeroField(NumWidth, NumHeight)
+    falseboard = BetterZeroField(blockWidth, blockHeight)
     board = BetterZeroField(NumWidth, NumHeight)
     # board = [
     #         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -87,7 +100,7 @@ def main():
 
         text_surface, rect = GAME_FONT.render("Score:", (255, 0, 0))
         text, rect = GAME_FONT.render(str(score), (255, 0, 0))
-        tetris, rect = GAME_FONT.render("TETRIS", (255, 0, 0))
+        tetris, rect = GAME_FONT.render("TETRIS", (random.randint(0, 255), 0, random.randint(0, 255)))
         screen.blit(text_surface, (720, 300))
         screen.blit(tetris, (720, 150))
         screen.blit(text, (720, 340))
@@ -99,47 +112,58 @@ def main():
      
 
 
-        for y in range(NumHeight - 1, 0, -1):
-            for x in range(NumWidth):
-                if(falseboard[y][x] == 1):
-                    pygame.draw.rect(screen, (255, 255, 0), (x * cellSide + 1, y * cellSide + 1, cellSide - 1, cellSide - 1))
-                if(falseboard[y][x] == 2):
-                    pygame.draw.rect(screen, (255, 0, 255), (x * cellSide + 1, y * cellSide + 1, cellSide - 1, cellSide - 1))
+        for y in range(len(falseboard) - 1, 0, -1):
+            for x in range(len(falseboard[0])):
+                
                 if(board[y][x] == 1):
                     pygame.draw.rect(screen, (255, 255, 0), (x * cellSide + 1, y * cellSide + 1, cellSide - 1, cellSide - 1))
                 if(board[y][x] == 2):
                     pygame.draw.rect(screen, (255, 0, 255), (x * cellSide + 1, y * cellSide + 1, cellSide - 1, cellSide - 1))
 
-        for y in range(NumHeight - 1, 0, -1):
-            for x in range(NumWidth):
-                if(falseboard[y][x] != 0 and y < NumHeight - 1 and x < NumWidth - 1 and falseboard[y + 1][x + delta] == 0  and board[y + 1][x + delta] == 0 and x + delta >= 0 and x + delta <= NumWidth):
-                    falseboard[y + 1][x + delta] = falseboard[y][x]
-                    falseboard[y][x] = 0
-                    # visited[y + 1][x + delta] = visited[y][x]
-                    # visited[y][x] = False
-                    pygame.time.delay(40)
+        for y in range(len(falseboard)):
+            for x in range(len(falseboard[0])):
+                if(falseboard[y][x] == 1):
+                    pygame.draw.rect(screen, (255, 255, 0), (cellSide * (x + delta) + 1, y * cellSide + 1, cellSide - 1, cellSide - 1))
+                if(falseboard[y][x] == 2):
+                    pygame.draw.rect(screen, (255, 0, 255), (cellSide * (x + delta) + 1, y * cellSide + 1, cellSide - 1, cellSide - 1))
 
-        for y in range(NumHeight - 1):
-            for x in range(NumWidth):
-                if(falseboard[NumHeight - 1][x] != 0 and visited[NumHeight - 1][x] == True):
-                    for y in range(NumHeight - 1, 0, -1):
-                        for x in range(NumWidth):
-                            if (falseboard[y][x] != 0):
-                                board[y][x] = falseboard[y][x]
-                    falseboard = BetterZeroField(NumWidth, NumHeight)
-                    block = False
-                    visited = FalseField(NumWidth, NumHeight)
+        # for y in range(NumHeight - 1, 0, -1):
+        #     for x in range(NumWidth):
+        #         if(falseboard[y][x] != 0 and y < NumHeight - 1 and x < NumWidth - 1 and falseboard[y + 1][x + delta] == 0  and board[y + 1][x + delta] == 0 and x + delta >= 0 and x + delta <= NumWidth):
+        #             falseboard[y + 1][x + delta] = falseboard[y][x]
+        #             falseboard[y][x] = 0
+        #             # visited[y + 1][x + delta] = visited[y][x]
+        #             # visited[y][x] = False
+        #             pygame.time.delay(40)
 
-        for y in range(NumHeight - 1):
-            for x in range(NumWidth):
-                if(falseboard[y][x] != 0 and board[y + 1][x] != 0):
-                    for y in range(NumHeight - 1):
-                        for x in range(NumWidth):
-                            if(board[y][x] == 0):
-                                board[y][x] = falseboard[y][x]
-                    falseboard = BetterZeroField(NumWidth, NumHeight)
-                    block = False
-                    visited = FalseField(NumWidth, NumHeight)
+        # for y in range(NumHeight - 1):
+        #     for x in range(NumWidth):
+        #         if(falseboard[NumHeight - 1][x] != 0 and visited[NumHeight - 1][x] == True):
+        #             for y in range(NumHeight - 1, 0, -1):
+        #                 for x in range(NumWidth):
+        #                     if (falseboard[y][x] != 0):
+        #                         board[y][x] = falseboard[y][x]
+        #             falseboard = BetterZeroField(NumWidth, NumHeight)
+        #             block = False
+        #             visited = FalseField(NumWidth, NumHeight)
+
+        # for y in range(NumHeight - 1):
+        #     for x in range(NumWidth):
+        #         if(falseboard[y][x] != 0 and board[y + 1][x] != 0):
+        #             for y in range(NumHeight - 1):
+        #                 for x in range(NumWidth):
+        #                     if(board[y][x] == 0):
+        #                         board[y][x] = falseboard[y][x]
+        #             falseboard = BetterZeroField(NumWidth, NumHeight)
+        #             block = False
+        #             visited = FalseField(NumWidth, NumHeight)
+
+
+        # for y in range(NumHeight - 1):
+        #     for x in range(NumWidth):
+        #         if(board[y][x] == ):
+
+        
 
 
         
@@ -150,12 +174,12 @@ def main():
         # This eliminates the lines
         for y in range(NumHeight - 1, 0, -1):
             a = 0
-            for x in range(NumWidth - 1):
-                if(falseboard[y][x] != 0):
-                    a += 1
+            # for x in range(NumWidth - 1):
+            #     if(falseboard[y][x] != 0):
+            #         a += 1
             if(a >= NumWidth - 1):
                 for x in range(NumWidth - 1):
-                    falseboard[y][x] = 0
+                    board[y][x] = 0
                 score += 100
 
         # for y in range(NumHeight - 1, 0, -1):
@@ -165,61 +189,64 @@ def main():
         #             board[y][x] = board[y][x + delta]
         #             board[y][x + delta] = 0
 
-        for y in range(NumHeight - 1, 0, -1):
-            for x in range(NumWidth):
-                if(falseboard[y][x] != 0):
-                    DFS(falseboard, x, y, visited)
-                    print(x, y)
-                    pygame.draw.rect(screen, (255, 0, 0), (x * cellSide + 1, y * cellSide + 1, cellSide, cellSide), 1)
+        # for y in range(NumHeight - 1, 0, -1):
+        #     for x in range(NumWidth):
+        #         if(falseboard[y][x] != 0):
+        #             DFS(falseboard, x, y, visited)
+        #             print(x, y)
+        #             pygame.draw.rect(screen, (255, 0, 0), (x * cellSide + 1, y * cellSide + 1, cellSide, cellSide), 1)
                     
 
         if(block == False):
-            print("Block")     
             BLOCK = RandomNum()
-            print(BLOCK)
+            # print(BLOCK)
             if (BLOCK == 1):
+                falseboard[1][0] = 1
+                falseboard[0][0] = 1
+                falseboard[2][0] = 1
+                falseboard[1][1] = 1
+            elif (BLOCK == 2):
+                falseboard[0][1] = 1
+                falseboard[1][0] = 1
+                falseboard[1][1] = 1
+                falseboard[0][0] = 1
+            elif (BLOCK == 3):
+                falseboard[0][0] = 1
                 falseboard[1][0] = 1
                 falseboard[1][1] = 1
                 falseboard[2][0] = 1
-                falseboard[2][1] = 1
-            elif (BLOCK == 2):
-                falseboard[1][1] = 1
-                falseboard[2][0] = 1
-                falseboard[2][1] = 1
-                falseboard[2][2] = 1
-            elif (BLOCK == 3):
-                falseboard[1][1] = 1
-                falseboard[1][2] = 1
-                falseboard[2][2] = 1
-                falseboard[2][3] = 1
             elif (BLOCK == 4):
-                falseboard[1][3] = 1
-                falseboard[1][2] = 1
-                falseboard[2][2] = 1
-                falseboard[2][1] = 1
+                falseboard[2][0] = 1
+                falseboard[0][1] = 1
+                falseboard[1][1] = 1
+                falseboard[1][0] = 1
                
             elif (BLOCK == 5):
+                falseboard[0][1] = 1
+                falseboard[1][1] = 1
                 falseboard[2][1] = 1
-                falseboard[2][2] = 1
-                falseboard[2][3] = 1
-                falseboard[1][3] = 1
+                falseboard[2][0] = 1
                
             elif (BLOCK == 6):
+                falseboard[0][0] = 1
+                falseboard[1][0] = 1
+                falseboard[2][0] = 1
                 falseboard[2][1] = 1
-                falseboard[2][2] = 1
-                falseboard[2][3] = 1
-                falseboard[1][1] = 1
                 
             elif (BLOCK == 7):
-                falseboard[2][1] = 1
-                falseboard[2][2] = 1
-                falseboard[2][3] = 1
-                falseboard[2][4] = 1
+                falseboard = BetterZeroField(1, 4)
+                blockWidth = 1
+                blockHeight = 4
+
+                falseboard[0][0] = 1
+                falseboard[1][0] = 1
+                falseboard[2][0] = 1
+                falseboard[3][0] = 1
             block = True
-            for y in range(NumHeight):
-                for x in range(NumWidth):
-                    if(falseboard[y][x] != 0):
-                        DFS(board, x, y, visited)
+            # for y in range(blockHeight):
+            #     for x in range(blockWidth):
+            #         if(falseboard[y][x] != 0):
+            #             DFS(board, x, y, visited)
                 
 
             
@@ -243,28 +270,39 @@ def main():
 
 
 
-                            delta = -1
+                            delta += -1
                 elif events.key == pygame.K_RIGHT:
                         if(xIdx < width/cellSide - 1):
                             xIdx += 1
-                            delta = 1
+                            delta += 1
                 elif events.key == pygame.K_UP:
-                    yIdx -= 1
-                    if(yIdx == -1):
-                        yIdx = 0
+                    falseboard = rotate(falseboard)
+                    g = NumWidth
+                    NumWidth = NumHeight
+                    NumHeight = g
+
+                    print(falseboard)
                 elif events.key == pygame.K_DOWN:
-                    yIdx += 1
-                    if(yIdx == height/cellSide):
-                        yIdx = height/cellSide - 1
+                    temparray = BetterZeroField(blockHeight, blockWidth)
+                    for y in range(blockWidth):
+                        for x in range(blockHeight):
+                            temparray[y][x] = falseboard[x][y]
+                    falseboard = temparray
+                    q = blockHeight
+                    blockHeight = blockWidth
+                    blockWidth = q
+                    
                 elif events.key == pygame.K_SPACE:
-                    print(visited)
+                    print(falseboard)
+                    
+                # elif events.key == pygame.K_DOWN:
+                #     temparray = BetterZeroField(3, 3)
+                #     for y in range(3):
+                #         for x in range(3):
+                #             temparray[y][x] = falseboard[x][y]
+                #     falseboard = temparray
+                    
                     
 
-            elif events.type == pygame.KEYUP:
-                if events.key == pygame.K_LEFT:
-                    delta = 0
-
-                elif events.key == pygame.K_RIGHT:
-                    delta = 0
 
 main()

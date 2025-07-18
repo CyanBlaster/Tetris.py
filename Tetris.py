@@ -133,6 +133,18 @@ def main():
                     block = False
                     visited = FalseField(NumWidth, NumHeight)
 
+        for y in range(NumHeight - 1):
+            for x in range(NumWidth):
+                if(falseboard[y][x] != 0 and board[y + 1][x] != 0):
+                    for y in range(NumHeight - 1):
+                        for x in range(NumWidth):
+                            if(board[y][x] == 0):
+                                board[y][x] = falseboard[y][x]
+                    falseboard = BetterZeroField(NumWidth, NumHeight)
+                    block = False
+                    visited = FalseField(NumWidth, NumHeight)
+
+
         # for y in range(NumHeight - 1):
         #     for x in range(NumHeight - 3):
         #         if(board[y + 1][x] != 0):

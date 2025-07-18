@@ -22,7 +22,7 @@ def FalseField(x, y):
 
 
 def RandomNum():
-    x = random.randint(1, 8) 
+    x = random.randint(1, 7) 
     return x
         
 def DFS(map, x, y, visited):
@@ -216,8 +216,10 @@ def main():
                     DFS(falseboard, x, y, visited)
                     
 
-        if(block == False):     
+        if(block == False):
+            print("Block")     
             BLOCK = RandomNum()
+            print(BLOCK)
             if (BLOCK == 1):
                 falseboard[1][0] = 1
                 falseboard[1][1] = 1

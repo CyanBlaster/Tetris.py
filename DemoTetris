@@ -120,15 +120,19 @@ def main():
             for x in range(len(board[0])):
                 if(board[y][x] == 1):
                     pygame.draw.rect(screen, (255, 255, 0), (x * cellSide + 1, y * cellSide + 1, cellSide - 1, cellSide - 1))
-                if(board[y][x] == 2):
+                elif(board[y][x] == 2):
                     pygame.draw.rect(screen, (255, 0, 255), (x * cellSide + 1, y * cellSide + 1, cellSide - 1, cellSide - 1))
+                else:
+                    pygame.draw.rect(screen, (0, 0, 0), (x * cellSide + 1, y * cellSide + 1, cellSide - 1, cellSide - 1))
 
         for y in range(len(falseboard)):
             for x in range(len(falseboard[0])):
                 if(falseboard[y][x] == 1):
                     pygame.draw.rect(screen, (255, 255, 0), (cellSide * (x + delta) + 1, cellSide * (y + fall) + 1, cellSide - 1, cellSide - 1))
-                if(falseboard[y][x] == 2):
+                elif(falseboard[y][x] == 2):
                     pygame.draw.rect(screen, (255, 0, 255), (cellSide * (x + delta) + 1, cellSide * (y + fall) + 1, cellSide - 1, cellSide - 1))
+                else:
+                    pygame.draw.rect(screen, (0, 0, 0), (cellSide * (x + delta) + 1, cellSide * (y + fall) + 1, cellSide - 1, cellSide - 1))
 
         # for y in range(NumHeight - 1, 0, -1):
         #     for x in range(NumWidth):
@@ -169,7 +173,7 @@ def main():
         fall += 1
         for y in range(blockHeight):
             for x in range(blockWidth):
-                if(falseboard[y][x] == 1 and y + fall > NumHeight - 1):
+                if(falseboard[y][x] == 1 and (y + fall > NumHeight - 1) or (y + fall < NumHeight - 1 and board[y + fall - 1][x + delta] == 1)):
                     for y in range(blockHeight):
                         for x in range(blockWidth):
                             print(y + fall)
@@ -177,7 +181,9 @@ def main():
                             if(falseboard[y][x] == 1):
                                 board[y + fall - 1][x + delta] = 1
                     print(board)
+                    falseboard = BetterZeroField(3, 3)
                     fall = 0
+                    block = 0
                    
 
         pygame.time.delay(100)
@@ -291,7 +297,7 @@ def main():
 
                             delta += -1
                 elif events.key == pygame.K_RIGHT:
-                        if(xIdx < width/cellSide - 1):
+                        if(xIdx < width/cellSide):
                             xIdx += 1
                             delta += 1
                 elif events.key == pygame.K_UP:

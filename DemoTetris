@@ -17,6 +17,9 @@ def ZeroField(n):
 def BetterZeroField(x, y):
     return [[0] * x for i in range(y)]
 
+def BetterOneField(x, y):
+    return [[1] * x for i in range(y)]
+
 def FalseField(x, y):
     return [[False] * x for i in range(y)]
 
@@ -113,9 +116,8 @@ def main():
      
 
 
-        for y in range(len(falseboard) - 1, 0, -1):
-            for x in range(len(falseboard[0])):
-                
+        for y in range(len(board)):
+            for x in range(len(board[0])):
                 if(board[y][x] == 1):
                     pygame.draw.rect(screen, (255, 255, 0), (x * cellSide + 1, y * cellSide + 1, cellSide - 1, cellSide - 1))
                 if(board[y][x] == 2):
@@ -165,6 +167,19 @@ def main():
         #         if(board[y][x] == ):
 
         fall += 1
+        for y in range(blockHeight):
+            for x in range(blockWidth):
+                if(falseboard[y][x] == 1 and y + fall > NumHeight - 1):
+                    for y in range(blockHeight):
+                        for x in range(blockWidth):
+                            print(y + fall)
+                            print(x+delta)
+                            if(falseboard[y][x] == 1):
+                                board[y + fall - 1][x + delta] = 1
+                    print(board)
+                    fall = 0
+                   
+
         pygame.time.delay(100)
 
 
@@ -296,8 +311,8 @@ def main():
                     blockHeight = blockWidth
                     blockWidth = q
                     
-                # elif events.key == pygame.K_SPACE:
-                #     fall += 1
+                elif events.key == pygame.K_SPACE:
+                    print(board)
                     
                 # elif events.key == pygame.K_DOWN:
                 #     temparray = BetterZeroField(3, 3)

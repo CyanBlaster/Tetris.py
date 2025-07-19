@@ -71,6 +71,7 @@ def main():
     blockTop = 0
     blockWidth = 2
     blockHeight = 3
+    fall = 0
 
 
     falseboard = BetterZeroField(blockWidth, blockHeight)
@@ -123,9 +124,9 @@ def main():
         for y in range(len(falseboard)):
             for x in range(len(falseboard[0])):
                 if(falseboard[y][x] == 1):
-                    pygame.draw.rect(screen, (255, 255, 0), (cellSide * (x + delta) + 1, y * cellSide + 1, cellSide - 1, cellSide - 1))
+                    pygame.draw.rect(screen, (255, 255, 0), (cellSide * (x + delta) + 1, cellSide * (y + fall) + 1, cellSide - 1, cellSide - 1))
                 if(falseboard[y][x] == 2):
-                    pygame.draw.rect(screen, (255, 0, 255), (cellSide * (x + delta) + 1, y * cellSide + 1, cellSide - 1, cellSide - 1))
+                    pygame.draw.rect(screen, (255, 0, 255), (cellSide * (x + delta) + 1, cellSide * (y + fall) + 1, cellSide - 1, cellSide - 1))
 
         # for y in range(NumHeight - 1, 0, -1):
         #     for x in range(NumWidth):
@@ -163,7 +164,8 @@ def main():
         #     for x in range(NumWidth):
         #         if(board[y][x] == ):
 
-        
+        fall += 1
+        pygame.time.delay(100)
 
 
         
@@ -247,7 +249,9 @@ def main():
             #     for x in range(blockWidth):
             #         if(falseboard[y][x] != 0):
             #             DFS(board, x, y, visited)
-                
+        
+        
+        
 
             
 
@@ -292,8 +296,8 @@ def main():
                     blockHeight = blockWidth
                     blockWidth = q
                     
-                elif events.key == pygame.K_SPACE:
-                    print(falseboard)
+                # elif events.key == pygame.K_SPACE:
+                #     fall += 1
                     
                 # elif events.key == pygame.K_DOWN:
                 #     temparray = BetterZeroField(3, 3)

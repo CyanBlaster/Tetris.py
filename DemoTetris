@@ -23,6 +23,38 @@ def BetterOneField(x, y):
 def FalseField(x, y):
     return [[False] * x for i in range(y)]
 
+def detectCollision(blockHeight, blockWidth, falseboard, fall, delta, board, NumHeight, collision):
+    # for y in range(blockHeight):
+    #         for x in range(blockWidth):
+    #             print(y, x)
+    #             print(falseboard)
+    #             if(falseboard[y - 1][x] == 1 and ((y + fall > NumHeight - 1) or (board[y + fall - 1][x + delta - 1] == 1))):
+    #                 a = fall
+    #                 fall = 0
+    #                 for y in range(blockHeight):
+    #                     for x in range(blockWidth):
+    #                         print(y + fall)
+    #                         print(x+delta)
+    #                         if(falseboard[y][x] == 1):
+    #                             print(y + a - 1)
+    #                             print(x + delta)
+    #                             board[y + a - 1][x + delta] = 1
+    #                 print(board)
+    #                 falseboard = BetterZeroField(3, 3)
+    #                 block = 0
+    for y in range(blockHeight):
+            for x in range(blockWidth):
+                print(y, x)
+                print(falseboard)
+                if(falseboard[y - 1][x] == 1):
+                    if(y + fall >= NumHeight - 1 or board[y + fall - 1][x + delta] == 1):
+                        collision = True
+    return collision
+                    
+
+
+
+
 def rotate(a):
     nRows = len(a[0])
     nCol = len(a)
@@ -57,7 +89,7 @@ def DFS(map, x, y, visited):
 
 
 def main():
-    
+    collision = False
     width = 700
     height = 850
     cellSide = 50
@@ -171,19 +203,34 @@ def main():
         #         if(board[y][x] == ):
 
         fall += 1
-        for y in range(blockHeight):
-            for x in range(blockWidth):
-                if(falseboard[y][x] == 1 and (y + fall > NumHeight - 1) or (y + fall < NumHeight - 1 and board[y + fall - 1][x + delta] == 1)):
-                    for y in range(blockHeight):
-                        for x in range(blockWidth):
-                            print(y + fall)
-                            print(x+delta)
-                            if(falseboard[y][x] == 1):
-                                board[y + fall - 1][x + delta] = 1
-                    print(board)
-                    falseboard = BetterZeroField(3, 3)
-                    fall = 0
-                    block = 0
+        # for y in range(0, blockHeight):
+        #     for x in range(0, blockWidth):
+        #         print(y, x)
+        #         print(falseboard)
+        #         if(falseboard[y][x] == 1 and (y + fall > NumHeight - 1) or (y + fall < NumHeight - 1 and board[y + fall - 1][x + delta] == 1)):
+        #             for y in range(blockHeight):
+        #                 for x in range(blockWidth):
+        #                     print(y + fall)
+        #                     print(x+delta)
+        #                     if(falseboard[y][x] == 1):
+        #                         board[y + fall - 1][x + delta] = 1
+        #             print(board)
+        #             falseboard = BetterZeroField(3, 3)
+        #             fall = 0
+        #             block = 0
+        
+        collision = detectCollision(blockHeight, blockWidth, falseboard, fall, delta, board, NumHeight, collision)
+
+        if(collision == True):
+            collision = False
+            for y in range(len(falseboard)):
+                for x in range(len(falseboard[0])):
+                    if(falseboard[y][x] == 1):
+                        board[y + fall][x + delta] = 1
+            fall = 0
+            falseboard = BetterZeroField(3, 3)
+            block = False
+
                    
 
         pygame.time.delay(100)
@@ -224,33 +271,39 @@ def main():
             BLOCK = RandomNum()
             # print(BLOCK)
             if (BLOCK == 1):
+                falseboard = BetterZeroField(2, 3)
                 falseboard[1][0] = 1
                 falseboard[0][0] = 1
                 falseboard[2][0] = 1
                 falseboard[1][1] = 1
             elif (BLOCK == 2):
+                falseboard = BetterZeroField(2, 3)
                 falseboard[0][1] = 1
                 falseboard[1][0] = 1
                 falseboard[1][1] = 1
                 falseboard[0][0] = 1
             elif (BLOCK == 3):
+                falseboard = BetterZeroField(2, 3)
                 falseboard[0][0] = 1
                 falseboard[1][0] = 1
                 falseboard[1][1] = 1
                 falseboard[2][0] = 1
             elif (BLOCK == 4):
+                falseboard = BetterZeroField(2, 3)
                 falseboard[2][0] = 1
                 falseboard[0][1] = 1
                 falseboard[1][1] = 1
                 falseboard[1][0] = 1
                
             elif (BLOCK == 5):
+                falseboard = BetterZeroField(2, 3)
                 falseboard[0][1] = 1
                 falseboard[1][1] = 1
                 falseboard[2][1] = 1
                 falseboard[2][0] = 1
                
             elif (BLOCK == 6):
+                falseboard = BetterZeroField(2, 3)
                 falseboard[0][0] = 1
                 falseboard[1][0] = 1
                 falseboard[2][0] = 1
@@ -301,12 +354,17 @@ def main():
                             xIdx += 1
                             delta += 1
                 elif events.key == pygame.K_UP:
-                    falseboard = rotate(falseboard)
+                    print("w", NumWidth)
+                    print("h", NumHeight)
                     g = NumWidth
                     NumWidth = NumHeight
                     NumHeight = g
-
+                    falseboard = rotate(falseboard)
                     print(falseboard)
+                    print("w", NumWidth)
+                    print("h", NumHeight)
+
+                    
                 elif events.key == pygame.K_DOWN:
                     temparray = BetterZeroField(blockHeight, blockWidth)
                     for y in range(blockWidth):

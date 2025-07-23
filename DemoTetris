@@ -55,7 +55,7 @@ def detectCollision(blockHeight, blockWidth, falseboard, fall, delta, board, Num
 
 
 
-def rotate(a):
+def rotate(a, delta, board):
     nRows = len(a[0])
     nCol = len(a)
     b = []
@@ -145,7 +145,10 @@ def main():
         # pygame.draw.rect(screen, (255, 255, 255), (xIdx * cellSide + 1, yIdx * cellSide + 1, cellSide - 1, cellSide - 1))
 
             
-     
+        # while(xIdx + delta >= 17):
+        #     delta -= 1
+        # while(xIdx + delta < 1):
+        #     delta += 1
 
 
         for y in range(len(board)):
@@ -290,6 +293,7 @@ def main():
 
         if(block == False):
             BLOCK = RandomNum()
+            BLOCK = 7
             # print(BLOCK)
             if (BLOCK == 1):
                 falseboard = BetterZeroField(2, 3)
@@ -363,27 +367,28 @@ def main():
                 running = False
             elif events.type == pygame.KEYDOWN:
                 if events.key == pygame.K_LEFT:
-                        if(xIdx > 1):
+                        if(xIdx > 2):
                             xIdx -= 1
+                            delta -= 1
                             
 
-
-
-                            delta += -1
                 elif events.key == pygame.K_RIGHT:
-                        if(xIdx < width/cellSide):
+                        if(BLOCK != 7 and xIdx < len(board[0])):
+                            xIdx += 1
+                            delta += 1
+                        elif(BLOCK == 7 and xIdx < len(board[0]) + 1):
                             xIdx += 1
                             delta += 1
                 elif events.key == pygame.K_UP:
-                    print("w", NumWidth)
-                    print("h", NumHeight)
+                    # print("w", NumWidth)
+                    # print("h", NumHeight)
                     g = NumWidth
                     NumWidth = NumHeight
                     NumHeight = g
-                    falseboard = rotate(falseboard)
-                    print(falseboard)
-                    print("w", NumWidth)
-                    print("h", NumHeight)
+                    falseboard = rotate(falseboard, delta, board)
+                    # print(falseboard)
+                    # print("w", NumWidth)
+                    # print("h", NumHeight)
 
                     
                 elif events.key == pygame.K_DOWN:

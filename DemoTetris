@@ -42,8 +42,8 @@ def detectCollision(blockHeight, blockWidth, falseboard, fall, delta, board, Num
     #                 print(board)
     #                 falseboard = BetterZeroField(3, 3)
     #                 block = 0
-    for y in range(blockHeight):
-            for x in range(blockWidth):
+    for y in range(len(falseboard)):
+            for x in range(len(falseboard[0])):
                 print(y, x)
                 print(falseboard)
                 if(falseboard[y][x] != 0):
@@ -68,7 +68,7 @@ def rotate(a):
 
 
 def RandomNum():
-    x = random.randint(1, 6) 
+    x = random.randint(1, 7) 
     return x
         
 def DFS(map, x, y, visited):
@@ -308,7 +308,7 @@ def main():
                 falseboard[0][0] = 3
                 falseboard[1][0] = 3
                 falseboard[1][1] = 3
-                falseboard[2][0] = 3
+                falseboard[2][1] = 3
             elif (BLOCK == 4):
                 falseboard = BetterZeroField(2, 3)
                 falseboard[2][0] = 4

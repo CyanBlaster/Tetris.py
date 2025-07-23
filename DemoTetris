@@ -46,7 +46,7 @@ def detectCollision(blockHeight, blockWidth, falseboard, fall, delta, board, Num
             for x in range(blockWidth):
                 print(y, x)
                 print(falseboard)
-                if(falseboard[y - 1][x] != 0):
+                if(falseboard[y][x] != 0):
                     if(y + fall >= len(board) - 1 or board[y + fall + 1][x + delta] != 0):
                         collision = True
     return collision
@@ -263,11 +263,11 @@ def main():
 
 
         # This eliminates the lines
-        for y in range(NumHeight - 1, 0, -1):
+        for y in range(len(falseboard)):
             a = 0
-            # for x in range(NumWidth - 1):
-            #     if(falseboard[y][x] != 0):
-            #         a += 1
+            for x in range(len(falseboard[0])):
+                if(falseboard[y][x] != 0):
+                    a += 1
             if(a >= NumWidth - 1):
                 for x in range(NumWidth - 1):
                     board[y][x] = 0
@@ -299,10 +299,10 @@ def main():
                 falseboard[1][1] = 1
             elif (BLOCK == 2):
                 falseboard = BetterZeroField(2, 3)
-                falseboard[0][1] = 2
+                falseboard[2][1] = 2
                 falseboard[1][0] = 2
                 falseboard[1][1] = 2
-                falseboard[0][0] = 2
+                falseboard[2][0] = 2
             elif (BLOCK == 3):
                 falseboard = BetterZeroField(2, 3)
                 falseboard[0][0] = 3
